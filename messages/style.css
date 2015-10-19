@@ -1,1 +1,8 @@
 /* Your CSS here... */
+
+#messages {
+
+	color: darkblue;
+	font-family: cursive;
+	background-color: gray;
+}

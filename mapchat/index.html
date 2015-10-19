@@ -1,0 +1,30 @@
+<!--index.html
+    created by Daniel Baigel
+    Comp20 Mapchat-->
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+  	<title>MAPCHAT</title>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/javascript">
+
+
+var map;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 8
+  });
+}
+
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script>
+  </body>
+</html>
