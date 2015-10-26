@@ -21,10 +21,11 @@
       var request = new XMLHttpRequest();
       var me = new google.maps.LatLng(myLat, myLng);
       var myOptions = {
-            zoom: 13, // The larger the zoom number, the bigger the zoom
+            zoom: 13, 
             center: me,
             mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
+      };
+      
       var map;
       var marker;
       var infowindow = new google.maps.InfoWindow();
@@ -37,14 +38,14 @@
       }
       
       function getMyLocation() {
-        if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
-          navigator.geolocation.getCurrentPosition(function(position) {
-            myLat = position.coords.latitude;
-            myLng = position.coords.longitude;
+        if (navigator.geolocation) { 
+            navigator.geolocation.getCurrentPosition(function(position) {
+              myLat = position.coords.latitude;
+              myLng = position.coords.longitude;
   
-            // TALK TO THE SEVER
-            makeRequest(login, message, myLat, myLng);
-          });
+              // TALK TO THE SEVER
+              makeRequest(login, message, myLat, myLng);
+            });
         }
         else {
           alert("Geolocation is not supported by your web browser.  What a shame!");
@@ -54,33 +55,32 @@
 
 
 
-      function makeRequest(login, message, lat, lng)
-      {
+      function makeRequest(login, message, lat, lng) {
                            
-            var send_string = "login=" + login + "&lat=" + lat + "&lng=" + lng + "&message=" + message;
-            var locations;
-            var req = new XMLHttpRequest(); //creates request
+        var send_string = "login=" + login + "&lat=" + lat + "&lng=" + lng + "&message=" + message;
+        var locations;
+        var req = new XMLHttpRequest(); //creates request
             
-            req.open("POST", "https://secret-about-box.herokuapp.com/sendLocation", true); // opens the data*/
-            req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        req.open("POST", "https://secret-about-box.herokuapp.com/sendLocation", true); // opens the data*/
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             
-            /* callback function */
-            req.onreadystatechange = function () {
-              if (req.readyState === 4) {
-                locations = JSON.parse(req.responseText);
-                renderMap(locations);
-              }
+        /* callback function */
+        req.onreadystatechange = function () {
+          if (req.readyState === 4) {
+            locations = JSON.parse(req.responseText);
+            renderMap(locations);
+          }
         
-            };
+        };
         
-            req.send(send_string);
+        req.send(send_string);
 
             
 
       }
 
-      function renderMap(locations)
-      {
+      function renderMap(locations) {
+        
         var markers = new Array();
 
         me = new google.maps.LatLng(myLat, myLng);
@@ -107,26 +107,26 @@
 
         for (var i = 0; i < locations.length; i++) {
             
-            var distance = calculateDistance(locations[i]);
+          var distance = calculateDistance(locations[i]);
             // Create a marker
 
           if (locations[i].login != "BenHarris"){  
-          person = new google.maps.LatLng(locations[i].lat, locations[i].lng);
+            person = new google.maps.LatLng(locations[i].lat, locations[i].lng);
           
-          markers[i] = new google.maps.Marker({
-            position: person,
-            title: locations[i].login,
-            content: locations[i].login + "<br>" + locations[i].message + "<br>" + (Math.round(distance * 100) / 100) + " miles"
-          });
+            markers[i] = new google.maps.Marker({
+              position: person,
+              title: locations[i].login,
+              content: locations[i].login + "<br>" + locations[i].message + "<br>" + (Math.round(distance * 100) / 100) + " miles"
+            });
           
-          markers[i].setMap(map);
+            markers[i].setMap(map);
          
           
-          // Open info window on click of marker
-          google.maps.event.addListener(markers[i], 'click', function() {
-            infowindow.setContent(this.content);
-            infowindow.open(map, this);
-          });
+            // Open info window on click of marker
+            google.maps.event.addListener(markers[i], 'click', function() {
+              infowindow.setContent(this.content);
+              infowindow.open(map, this);
+            });
 
           }
         }
@@ -134,8 +134,10 @@
       }
 
       function calculateDistance(locations) {
+        /* formula taken and modified from 
+        http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript*/
         Number.prototype.toRad = function() {
-        return this * Math.PI / 180;
+          return this * Math.PI / 180;
         }
 
         var lat2 = myLat; 
@@ -144,7 +146,7 @@
         var lon1 = locations.lng; 
 
         var R = 3959; // miles 
-        //has a problem with the .toRad() method below.
+        
         var x1 = lat2-lat1;
         var dLat = x1.toRad();  
         var x2 = lon2-lon1;
