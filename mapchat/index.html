@@ -2,29 +2,134 @@
     created by Daniel Baigel
     Comp20 Mapchat-->
 
+
 <!DOCTYPE html>
 
 <html>
+
   <head>
-  	<title>MAPCHAT</title>
-    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <title>Geolocation Map Example</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <link rel="stylesheet" href="stylesheet.css" />
+    
+    <script>
+      var myLat = 0;
+      var myLng = 0;
+      var login = "BenHarris";
+      var message = "HERE_IS_MY_MESSAGE";
+      var request = new XMLHttpRequest();
+      var me = new google.maps.LatLng(myLat, myLng);
+      var myOptions = {
+            zoom: 13, // The larger the zoom number, the bigger the zoom
+            center: me,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+      var map;
+      var marker;
+      var infowindow = new google.maps.InfoWindow();
+      
+      function init()
+      {
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        var positions = getMyLocation();
+ 
+      }
+      
+      function getMyLocation() {
+        if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
+          navigator.geolocation.getCurrentPosition(function(position) {
+            myLat = position.coords.latitude;
+            myLng = position.coords.longitude;
+  
+            // TALK TO THE SEVER
+            makeRequest(login, message, myLat, myLng);
+          });
+        }
+        else {
+          alert("Geolocation is not supported by your web browser.  What a shame!");
+        }
+       
+      }
+
+
+
+      function makeRequest(login, message, lat, lng)
+      {
+                           
+            var send_string = "login=" + login + "&lat=" + lat + "&lng=" + lng + "&message=" + message;
+            var locations;
+            var req = new XMLHttpRequest(); //creates request
+            
+            req.open("POST", "https://secret-about-box.herokuapp.com/sendLocation", true); // opens the data*/
+            req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            
+            /* callback function */
+            req.onreadystatechange = function () {
+              if (req.readyState === 4) {
+                locations = JSON.parse(req.responseText);
+                renderMap(locations);
+              }
+        
+            };
+        
+            req.send(send_string);
+
+            
+
+      }
+
+      function renderMap(locations)
+      {
+        var markers = new Array();
+
+        me = new google.maps.LatLng(myLat, myLng);
+        
+        // Update map and go there...
+        map.panTo(me);
+  
+        // Create a marker
+        marker = new google.maps.Marker({
+          position: me,
+          title: "Here I Am!"
+        });
+        marker.setMap(map);
+          
+        // Open info window on click of marker
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(marker.title);
+          infowindow.open(map, marker);
+        });
+
+
+
+        for (var i = 0; i < locations.length; i++) {
+            // Create a marker
+          person = new google.maps.LatLng(locations[i].lat, locations[i].lng);
+          
+          markers[i] = new google.maps.Marker({
+            position: person,
+            title: locations[i].login
+          });
+          
+          markers[i].setMap(map);
+         
+          
+          // Open info window on click of marker
+          google.maps.event.addListener(markers[i], 'click', function() {
+            infowindow.setContent(this.title);
+            infowindow.open(map, this);
+          });
+
+
+        }
+
+      }
+
+    </script>
   </head>
-  <body>
-    <div id="map"></div>
-    <script type="text/javascript">
-
-
-var map;
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 8
-  });
-}
-
-    </script>
-    <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
-    </script>
+  
+  <body onload="init()">
+    <div id="map_canvas"></div>
   </body>
 </html>
