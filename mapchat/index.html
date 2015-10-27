@@ -116,7 +116,7 @@
             markers[i] = new google.maps.Marker({
               position: person,
               title: locations[i].login,
-              content: locations[i].login + "<br>" + locations[i].message + "<br>" + (Math.round(distance * 100) / 100) + " miles"
+              content: locations[i].login + "<br>" + locations[i].message + "<br>" + distance + " miles"
             });
           
             markers[i].setMap(map);
