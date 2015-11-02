@@ -24,7 +24,7 @@
         $(document).ready (function() {
               
             for (var i = 0; i < oldMessages.length; i++) {
-                document.getElementById('log').innerHTML = "<p>" + oldMessages[i].message + " " + oldMessages[i].date + "</p>" + document.getElementById('log').innerHTML;
+                document.getElementById('log').innerHTML = "<p>" + oldMessages[i].date  + " - " + oldMessages[i].message + "</p>" + document.getElementById('log').innerHTML;
             }
             $("#msg").keydown(function(e) {
             // get all the inputs into an array.
@@ -38,7 +38,7 @@
                     };
                     localStorage.oldMessages = JSON.stringify(oldMessages);
                     
-                    document.getElementById('log').innerHTML = "<p>" + input + " " + today + "</p>" + document.getElementById('log').innerHTML;
+                    document.getElementById('log').innerHTML = "<p>" + today + " - " + input + "</p>" + document.getElementById('log').innerHTML;
                 }
             });
         });
