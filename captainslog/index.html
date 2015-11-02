@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Captain's Log</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+     
+        var storedVals = localStorage.oldMessages;
+        var oldMessages;
+        if (storedVals === undefined) {
+            localStorage.setItem("oldMessages", "[]");
+            oldMessages = [];
+        } else {
+            oldMessages = JSON.parse(storedVals);
+            for (var i = 0; i < oldMessages.length; i++) {
+                oldMessages[i].date = new Date(Date.parse(oldMessages[i].date));
+            }
+        }
+
+
+
+        $(document).ready (function() {
+              
+            for (var i = 0; i < oldMessages.length; i++) {
+                document.getElementById('log').innerHTML = "<p>" + oldMessages[i].message + " " + oldMessages[i].date + "</p>" + document.getElementById('log').innerHTML;
+            }
+            $("#msg").keydown(function(e) {
+            // get all the inputs into an array.
+                if(e.keyCode === 13){
+                    var input = $('#msg').val();
+                    var today = new Date();
+                    inputArray = input;
+                    oldMessages[oldMessages.length] = {
+                        date: today,
+                        message: input
+                    };
+                    localStorage.oldMessages = JSON.stringify(oldMessages);
+                    
+                    document.getElementById('log').innerHTML = "<p>" + input + " " + today + "</p>" + document.getElementById('log').innerHTML;
+                }
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+    <h1>Captain's Log</h1>
+    <h3>New entry: <input type="text" id="msg" name="msg" size="30" />
+    </h3>
+    <div id="log"></div>
+</body>
+</html>
