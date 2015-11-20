@@ -1,5 +1,3 @@
-
-
 function parse() {
 
 	var request = new XMLHttpRequest(); //creates request

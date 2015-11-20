@@ -16,10 +16,10 @@
     <script>
       var myLat = 0;
       var myLng = 0;
-      var login = "BenHarris";
+      var login = "LeeMiller";
       var message = "HERE_IS_MY_MESSAGE";
       var request = new XMLHttpRequest();
-      var me = new google.maps.LatLng(myLat, myLng);
+      var me = new google.maps.LatLng(myLat + .05, myLng + .05);
       var myOptions = {
             zoom: 13, 
             center: me,
@@ -61,7 +61,7 @@
         var locations;
         var req = new XMLHttpRequest(); //creates request
             
-        req.open("POST", "https://secret-about-box.herokuapp.com/sendLocation", true); // opens the data*/
+        req.open("POST", "https://arcane-thicket-5975.herokuapp.com/sendLocation", true); // opens the data*/
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             
         /* callback function */
@@ -132,13 +132,14 @@
         }
 
       }
+      function toRad(number) {
+        return number * Math.PI / 180;
+      }
 
       function calculateDistance(locations) {
         /* formula taken and modified from 
         http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript*/
-        Number.prototype.toRad = function() {
-          return this * Math.PI / 180;
-        }
+
 
         var lat2 = myLat; 
         var lon2 = myLng; 
@@ -148,11 +149,11 @@
         var R = 3959; // miles 
         
         var x1 = lat2-lat1;
-        var dLat = x1.toRad();  
+        var dLat = toRad(x1);  
         var x2 = lon2-lon1;
-        var dLon = x2.toRad();  
+        var dLon = toRad(x2);  
         var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-                        Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
                         Math.sin(dLon/2) * Math.sin(dLon/2);  
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
         var d = R * c; 
