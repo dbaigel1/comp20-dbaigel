@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Security Writeup</title>
+</head>
+<body>
+
+<h1> Introduction </h1>
+    <p> The product that I've been hired to analyze is called MapChat.
+        It allows users to send a message to their classmates, sharing their 
+        location in the process. All users can see their classmates locations.
+        I have been hired to penetration test and analyze the source code
+        in order to report 3 web security issues that I have found.
+    </p>
+
+<h1> Methodology </h1>
+    <p> I used a chrome extension called Postman to send test queries to the
+        server.
+
+    </p>
+
+<h1> Abstract of Findings </h1>
+
+<h1> Issues Found </h1>
+    
+    <h3> Issue 1: Cross Site Scripting during user input</h3>
+        <ul>
+            <li>The issue here is one called Cross Site Scripting (XSS)</li>
+            
+            <li>The issue was found when sending the server a user's location :
+            URL/sendLocation</li>
+            
+            <li>The severity of this issue is medium. The only reason that it is not
+            high severity is because the attacker needs to know the format of
+            the data that the database requires. If an attacker can get this
+            information, then the severity would be higher because XSS allows
+            the attacker to completely deface the site.</li>
+            
+            <li>He/She can inject code
+            to forward the site to a new site, or change content of the site. As seen in the 'message' section of 
+            the postman screenshot below <img src="xss_postman.png"> </li>
+            
+            <li>After the postman query has been sent to the database, this is what happens when someone
+                tries to access the original webpage mysterious-hamlet-3112.herokuapp.com <img src="xss_result.png"></li>
+            
+            <li> This issue could be resolved by sanitizing user input in the app.post /sendLocation
+            method : app.post('/sendLocation', function(request, response), seen on line 55 of the index.js file.
+            Sanitizing user input means clearing out all input with html code and/or script tags before entering it into the database. 
+            </li>
+        </ul>
+        
+            
+             
+            
+          
+        
+
+    <h3> Issue 2: Inherent privacy issues with displaying user's locations</h3>
+        <ul>
+            <li>The issue here is one called Sensitive Data Exposure</li>
+            
+            <li>The issue was found when visiting the home page of the site, and seeing every other
+                user's specific geolocation, the time that they checked into the location,
+                their names, and their messages</li>
+            
+            <li>The severity of this issue is high. The issue lies within the entire idea of the application
+                This app allows you to see sensitive information about other people without having to do any sort
+                of security attacking! I rate this as high severity because it requires no skills to gain valuable
+                information about other people.
+            </li>
+            
+            <li>Anyone with internet access can visit the webpage : 'http://mysterious-hamlet-3112.herokuapp.com/' and gain valuable information.
+                Here is a screenshot, proving the vulnerability.
+                <img src="privacy.png"> </li>
+            
+            
+            <li> This issue is inherent within the entire idea of the purpose of the application. In order to resolve the issue,
+                 the app should not display any sensitive user information to the entire public, including geolocation, and timestamps. 
+            </li>
+        </ul>
+
+
+    <h3>
+    </h3>
+
+<h1> Conclusion </h1>
+
+</body>
+</html>
