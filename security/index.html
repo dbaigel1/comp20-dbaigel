@@ -15,11 +15,19 @@
 
 <h1> Methodology </h1>
     <p> I used a chrome extension called Postman to send test queries to the
-        server.
+        server. Before doing this however, I read over the source code and manually
+        looked for any bugs and code mistakes before testing my assumptions.
 
     </p>
 
 <h1> Abstract of Findings </h1>
+    <p>
+        The vulnerabilities in this application mostly come from the idea of programmers trusting that
+        user input will always be correct and harmless. When sending data to the server, user input should
+        be tested for validity. We should also make sure that no user or group of users are sending too much
+        data at a time. Lastly, we need to make sure that sensitive user information is kept private, and not displayed
+        publicly for the world to see.
+    </p>
 
 <h1> Issues Found </h1>
     
@@ -80,10 +88,44 @@
         </ul>
 
 
-    <h3>
-    </h3>
+    <h3> Issue 3: Site is vulnerable to a DoS (Denial of Service) attack</h3>
+    <ul>
+            <li>The issue here is one called a Denial of Service (DoS) attack</li>
+            
+            <li>The location of this issue is found in the index.js file in the app.post method. There is no code to
+                prevent any user from constantly flooding the server with requests.
+            </li>
+            
+            <li> The severity of this issue is medium. DDoS attacks are very common attacks in recent events in the past few years.
+                 If an attacker or group of attackers executed a DDoS attack on this application, it would be annoying for a few days,
+                 or for however long they continue the attack, but in the end, a DDoS doesn't alter any data in the webpage and once the
+                 attack stops, things would go back to normal.
+            </li>
+            
+            <li> A DoS attack happens when an attacker, or group of attackers (Distributed DoS), constantly sends
+                 data to the server until the webpage becomes extremely slow to the point of unusable for users. The attacker
+                 essentially floods the server, making it unavailable for other users.
+            </li>
+            
+            <li> The programmer did not limit the number of times a user can send requests to the server, 
+                 as shown from the app.post method in the source code below. <img src="ddos.png">
+
+            </li>
+            
+            <li> To prevent a DoS from happening on the application, the programmer can limit the number of times
+                 any given user can make a request to the server, thus stopping the server from flooding. 
+            </li>
+        </ul>
 
 <h1> Conclusion </h1>
+    <p>
+        In conclusion, there are a lot of common vulnerabilities in this application, but the bright side is that they
+        can be easily fixed! Preventing Cross Site Scripting just requires the programmer to sanitize all user input. 
+        Make sure not to display sensitive user information on the app for everyone to see, and limit the number of requests
+        any given user can make to the server. These three changes are trivial and can really increase the security on this application.
+        The programmer did do a good job of making sure that the 'lat' and 'lng' coordinates for input were of the right form, otherwise
+        there would have been a security issue there as well.
+    </p>
 
 </body>
 </html>
